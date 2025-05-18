@@ -3,11 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const connectdb = require('./db/connect');
-const booksRoutes =require('./routes/book')
+const booksRoutes =require('./routes/book');
+const authRoutes = require('./routes/authroutes');
+const setupSwaggerDocs =require('./config/swagger');
 
- app.use(express.json());
+setupSwaggerDocs(app);
+app.use(express.json());
 app.use('/api/books',booksRoutes)
-
+app.use('/api/auth', authRoutes);
 const start = async() =>{
     try {
         await connectdb(process.env.MONGO_URI)

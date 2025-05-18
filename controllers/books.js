@@ -1,16 +1,27 @@
 const Book = require('../models/book');
 
-// Get all books
 const getallbooks = async (req, res) => {
     try {
-        const books = await Book.find();
-        res.status(200).json({ books });
+    const {page=1, limit=10} =req.query;
+    const pageNumber = Number(page);
+    const limitNumber = Number(limit);
+
+    const books = await Book.find()
+    .skip((pageNumber-1) * limitNumber)
+    .limit(limitNumber);
+
+    const totalbooks= await Book.countDocuments();
+
+    res.status(200).json({
+        page: Number(page),
+        limit: Number(limit),
+        data: books,
+      });
     } catch (error) {
-        res.status(500).json({ message: 'Server error while fetching books', error });
+      res.status(500).json({ message: 'Error fetching books', error });
     }
 };
 
-// Get single book by ID
 const getsinglebook = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
@@ -23,7 +34,6 @@ const getsinglebook = async (req, res) => {
     }
 };
 
-// Create a new book
 const createbook = async (req, res) => {
     const { title, author, available } = req.body;
     if (!title || !author) {
@@ -39,7 +49,6 @@ const createbook = async (req, res) => {
     }
   };
 
-// Update a book
 const updateBook = async (req, res) => {
     const { id } = req.params;
     const { title, author, available } = req.body;

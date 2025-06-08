@@ -28,7 +28,4 @@ A RESTful API built with Node.js, Express, and MongoDB to manage a collection of
 | PUT    | /api/books/:id   | Update a book         |
 | DELETE | /api/books/:id   | Delete a book         |
 
-## 🔄 Pagination Example
 
-```http
-GET /api/books?page=2&limit=5
